@@ -4,7 +4,7 @@ It will allow them to track their progress and change status of the tasks when i
 And this app will definitely help the users to schedule their daily activities and manage their time in a best way.
 ***
 Team(Group 5)
-1. Lakhveer Singh
-2. Gopika Ajith
-3. Christeena Karunattu Sunny
-4. Manmohan Singh
+* Lakhveer Singh
+* Gopika Ajith
+* Christeena Karunattu Sunny
+* Manmohan Singh
