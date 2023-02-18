@@ -10,7 +10,18 @@ And this app will definitely help the users to schedule their daily activities a
 * Manmohan Singh
 * 
 # Features
-* Users can add their to do list
+* Users can add tasks to their to do list
+* Users can see all the tasks in the task list
+* Users can edit their task
+* Users can delete their tasks
+* Users can clear all tasks
+* They tasks can be saved in local storage
+* The tasks can be sorted 
+* Toast will be shown when a task is added, edited or deleted
+* A reminder can be set
+* Will show message if not the task
+* There will be alerts
+* The completed tasks can be cleared or can be changed to another color
 * They can select a date which they think the task could be completed
 * Users can update when they starts working on the task
 * Users can update the status as completed when a task is completed.
