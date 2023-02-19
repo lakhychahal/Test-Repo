@@ -8,7 +8,6 @@ And this app will definitely help the users to schedule their daily activities a
 * Gopika Ajith
 * Christeena Karunattu Sunny
 * Manmohan Singh
-* 
 # Features
 * Users can add tasks to their to do list
 * Users can see all the tasks in the task list
@@ -28,7 +27,7 @@ And this app will definitely help the users to schedule their daily activities a
 * Users will be able to set priorities for each task by selecting specific colours for high, Medium and low priority
 
 # Specs
-1) Android Studio with Kotlin programming language
+1) Android Studio with Java programming language
 2) For now only work on Android devices
 3) Users can save tasks that have to be done
 
