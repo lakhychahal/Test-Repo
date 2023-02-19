@@ -17,9 +17,6 @@
         android:backgroundTint="@android:color/white"
         android:contentDescription="@string/task_description"
         android:padding="16dp"
-
-
-
         android:fontFamily="@font/robo5"/>
 
 
