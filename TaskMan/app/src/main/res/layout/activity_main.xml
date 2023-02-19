@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/teal_200">
+
+    <ImageView
+        android:id="@+id/my_image_view"
+        android:layout_width="90dp"
+        android:layout_height="90sp"
+        android:layout_marginBottom="100dp"
+        android:src="@drawable/notepad" />
+
+    <RelativeLayout
+        android:id="@+id/add_task_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100sp">
+
+        <EditText
+
+            android:id="@+id/task_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/material_on_surface_disabled"
+            android:fontFamily="@font/robo1"
+            android:hint="Enter your text here"
+            android:padding="16dp"
+            android:textSize="16sp" />
+
+
+        <Button
+            android:id="@+id/add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+
+            android:text="@string/add" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/task_list_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_task_layout"
+        android:orientation="vertical" />
+
+</RelativeLayout>
