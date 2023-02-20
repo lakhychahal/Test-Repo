@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,6 +47,14 @@ public class MainActivity extends AppCompatActivity {
                     saveTasks();
 
                 }
+            }
+        });
+        Button clearAllButton = findViewById(R.id.clearAllButton);
+        clearAllButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Call the method to clear all the tasks
+                clearAllTasks();
             }
         });
     }
@@ -109,5 +119,30 @@ public class MainActivity extends AppCompatActivity {
         Set<String> taskSet = new HashSet<>(taskList);
         editor.putStringSet("taskList", taskSet);
         editor.apply();
+    }
+    private void clearAllTasks() {
+        // Clear the HashSet and update the UI
+        taskList.clear();
+        saveTasks();
+        updateUI();
+        Toast.makeText(this, "All the tasks are cleared " , Toast.LENGTH_SHORT).show();
+    }
+    private void updateUI() {
+        taskListLayout.removeAllViews();
+
+        for (String task : taskList) {
+            View itemView = getLayoutInflater().inflate(R.layout.task_layout, null);
+
+            TextView taskTextView = itemView.findViewById(R.id.task_text_view);
+            taskTextView.setText(task);
+
+            ImageView deleteButton = itemView.findViewById(R.id.delete_button);
+            deleteButton.setOnClickListener(v -> {
+                taskList.remove(task);
+                updateUI();
+            });
+
+            taskListLayout.addView(itemView);
+        }
     }
 }

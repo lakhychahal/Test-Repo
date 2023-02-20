@@ -3,4 +3,5 @@
     <string name="add">Add</string>
     <string name="task_description">Edit the task</string>
     <string name="edit">Edit</string>
+    <string name="clear_all">clear all</string>
 </resources>
