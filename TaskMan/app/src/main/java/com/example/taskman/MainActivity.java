@@ -144,6 +144,9 @@ public class MainActivity extends AppCompatActivity {
             });
 
             taskListLayout.addView(itemView);
+        }
+    
+        }
     private void loadTasks() {
         SharedPreferences sharedPreferences = getSharedPreferences("tasks", MODE_PRIVATE);
         Set<String> taskSet = sharedPreferences.getStringSet("taskList", new HashSet<String>());
