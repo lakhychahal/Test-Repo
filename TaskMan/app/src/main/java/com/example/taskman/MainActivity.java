@@ -60,13 +60,25 @@ public class MainActivity extends AppCompatActivity {
                 editTask(taskView, task);
             }
         });
+        Button deleteButton = taskView.findViewById(R.id.delete_button);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeTaskView(taskView, task);
+            }
+        });
 
         taskListLayout.addView(taskView);
+    }
+    private void removeTaskView(View taskView, String task) {
+        taskListLayout.removeView(taskView);
+        taskList.remove(task);
+        saveTasks();
     }
     private void editTask(final View taskView, final String task) {
         final EditText taskEditText = taskView.findViewById(R.id.task_text_view);
         final Button editButton = taskView.findViewById(R.id.edit_button);
-
+        final Button deleteButton = taskView.findViewById(R.id.delete_button);
 
         taskEditText.setEnabled(true);
         editButton.setText("Save");
@@ -83,6 +95,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeTaskView(taskView, task);
+            }
+        });
+
     }
     private void saveTasks() {
         SharedPreferences sharedPreferences = getSharedPreferences("tasks", MODE_PRIVATE);
