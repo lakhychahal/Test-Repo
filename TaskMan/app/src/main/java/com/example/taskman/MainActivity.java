@@ -96,11 +96,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         taskListLayout.addView(taskView);
+        Toast.makeText(this, "Task added: " + task, Toast.LENGTH_SHORT).show();
     }
     private void removeTaskView(View taskView, String task) {
         taskListLayout.removeView(taskView);
         taskList.remove(task);
         saveTasks();
+        Toast.makeText(this, "Task removed: " + task, Toast.LENGTH_SHORT).show();
     }
     private void editTask(final View taskView, final String task) {
         final EditText taskEditText = taskView.findViewById(R.id.task_text_view);
@@ -128,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 removeTaskView(taskView, task);
             }
         });
-
+        Toast.makeText(this, "Task edited " + task, Toast.LENGTH_SHORT).show();
     }
 
     private void saveTasks() {
@@ -137,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
         Set<String> taskSet = new HashSet<>(taskList);
         editor.putStringSet("taskList", taskSet);
         editor.apply();
+        Toast.makeText(this, "Task saved ", Toast.LENGTH_SHORT).show();
     }
     private void clearAllTasks() {
         // Clear the HashSet and update the UI
