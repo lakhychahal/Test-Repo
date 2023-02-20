@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,6 +56,22 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Call the method to clear all the tasks
                 clearAllTasks();
+            }
+        });
+        Button sortButton = findViewById(R.id.sort_button);
+        sortButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Sort the task list alphabetically
+                Collections.sort(taskList);
+
+                // Clear the task list layout
+                taskListLayout.removeAllViews();
+
+                // Add the tasks to the task list layout
+                for (String task : taskList) {
+                    addTaskView(task);
+                }
             }
         });
     }

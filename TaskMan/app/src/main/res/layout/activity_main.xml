@@ -2,6 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/teal_200">
 
     <ImageView
@@ -27,6 +29,10 @@
             android:hint="Enter your text here"
             android:padding="16dp"
             android:textSize="16sp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true">
 
 
         <Button
@@ -36,8 +42,20 @@
             android:layout_alignParentEnd="true"
 
             android:text="@string/add" />
+        <Button
+            android:id="@+id/sort_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sort"
 
-    </RelativeLayout>
+            app:layout_constraintTop_toBottomOf="@+id/task_list_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="NotSibling,RelativeOverlap" />
+    </LinearLayout>
+
+
+</RelativeLayout>
 
     <LinearLayout
         android:id="@+id/task_list_layout"
@@ -71,4 +89,6 @@
 
     </RelativeLayout>
 
+
 </RelativeLayout>
+
