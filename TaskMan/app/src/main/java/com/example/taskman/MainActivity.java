@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         taskListLayout = findViewById(task_list_layout);
 
         taskList = new ArrayList<>();
-
+        loadTasks();
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
     private void saveTasks() {
         SharedPreferences sharedPreferences = getSharedPreferences("tasks", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -143,6 +144,12 @@ public class MainActivity extends AppCompatActivity {
             });
 
             taskListLayout.addView(itemView);
+    private void loadTasks() {
+        SharedPreferences sharedPreferences = getSharedPreferences("tasks", MODE_PRIVATE);
+        Set<String> taskSet = sharedPreferences.getStringSet("taskList", new HashSet<String>());
+        taskList = new ArrayList<>(taskSet);
+        for (String task : taskList) {
+            addTaskView(task);
         }
     }
 }
