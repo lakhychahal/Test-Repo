@@ -44,11 +44,12 @@ public class MainActivity extends AppCompatActivity {
     private Button addButton;
     private LinearLayout taskListLayout;
     private ArrayList<String> taskList;
-
+    TextView emptytasks;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        emptytasks = findViewById(R.id.emptytasks);
 
         taskEditText = findViewById(R.id.task_edit_text);
         ImageButton addButton = (ImageButton) findViewById(R.id.add_button);
@@ -97,6 +98,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addTaskView(final String task) {
+        if (task.isEmpty()) {
+            emptytasks.setVisibility(View.VISIBLE);
+            taskListLayout.setVisibility(View.GONE);
+        } else {
+            emptytasks.setVisibility(View.GONE);
+            taskListLayout.setVisibility(View.VISIBLE);
+        }
         final View taskView = getLayoutInflater().inflate(R.layout.task_layout, null, false);
         TextView taskTextView = taskView.findViewById(R.id.task_text_view);
         taskTextView.setText(task);
@@ -197,6 +205,13 @@ public class MainActivity extends AppCompatActivity {
         taskList.remove(task);
         saveTasks();
         Toast.makeText(this, "Task removed: ", Toast.LENGTH_SHORT).show();
+        if (taskList.isEmpty()) {
+            emptytasks.setVisibility(View.VISIBLE);
+            taskListLayout.setVisibility(View.GONE);
+        } else {
+            emptytasks.setVisibility(View.GONE);
+            taskListLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     private View selectedTaskView = null;
@@ -296,6 +311,14 @@ public class MainActivity extends AppCompatActivity {
         saveTasks();
         updateUI();
         Toast.makeText(this, "All the tasks are cleared " , Toast.LENGTH_SHORT).show();
+        if (taskList.isEmpty()) {
+            emptytasks.setVisibility(View.VISIBLE);
+            taskListLayout.setVisibility(View.GONE);
+        } else {
+            emptytasks.setVisibility(View.GONE);
+            taskListLayout.setVisibility(View.VISIBLE);
+        }
+
     }
     private void updateUI() {
         taskListLayout.removeAllViews();

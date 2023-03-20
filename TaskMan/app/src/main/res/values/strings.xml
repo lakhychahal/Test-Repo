@@ -20,4 +20,5 @@
     <string name="taskman">Task has created</string>
     <string name="set_reminder">Set the Reminder</string>
     <string name="reminder_set">Set Reminder</string>
+    <string name="empty_task">There is no active task</string>
 </resources>
