@@ -26,6 +26,15 @@
         android:background="@drawable/rounded_edittext_background"
         android:elevation="8dp"/>
 
+    <ImageButton
+        android:id="@+id/reminder_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#6BB84F"
+        android:contentDescription="@string/reminder_button_description"
+        android:foregroundTint="#9C3131"
+        android:src="@android:drawable/ic_popup_reminder" />
+
     <CheckBox
         android:id="@+id/task_checkbox"
         android:layout_width="wrap_content"

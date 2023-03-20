@@ -1,8 +1,16 @@
 package com.example.taskman;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.AlarmClock;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +18,23 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -89,6 +101,14 @@ public class MainActivity extends AppCompatActivity {
         TextView taskTextView = taskView.findViewById(R.id.task_text_view);
         taskTextView.setText(task);
 
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) ImageButton remindButton = taskView.findViewById(R.id.reminder_button);
+        remindButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showReminderDialog(task);
+            }
+        });
+
         final CheckBox checkBox = taskView.findViewById(R.id.task_checkbox);
         boolean isChecked = checkBox.isChecked();
         checkBox.setChecked(isChecked);
@@ -121,6 +141,57 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "Task added: ", Toast.LENGTH_SHORT).show();
     }
 
+    private void showReminderDialog(final String task) {
+        final View dialogView = getLayoutInflater().inflate(R.layout.reminder_dialog, null);
+        final DatePicker datePicker = dialogView.findViewById(R.id.datePicker);
+        final TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.set_reminder));
+        builder.setView(dialogView);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                int year = datePicker.getYear();
+                int month = datePicker.getMonth();
+                int day = datePicker.getDayOfMonth();
+                int hour = timePicker.getHour();
+                int minute = timePicker.getMinute();
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, day);
+                calendar.set(Calendar.HOUR_OF_DAY, hour);
+                calendar.set(Calendar.MINUTE, minute);
+                calendar.set(Calendar.SECOND, 0);
+                setReminder(task, calendar.getTimeInMillis());
+                Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM);
+                intent.putExtra(AlarmClock.EXTRA_DAYS, day);
+                intent.putExtra(AlarmClock.EXTRA_HOUR,hour);
+                intent.putExtra(AlarmClock.EXTRA_MINUTES,minute);
+                startActivity(intent);
+
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.create().show();
+    }
+
+    private void setReminder(String task, long timeInMillis) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, ReminderBroadcastReceiver.class);
+        intent.putExtra("task", task);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        try {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
+            Log.d("Reminder", "Alarm set for " + new Date(timeInMillis));
+            Toast.makeText(this, getString(R.string.reminder_set), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.e("Reminder", "Error setting alarm", e);
+        }
+    }
     private void removeTaskView(View taskView, String task) {
         taskListLayout.removeView(taskView);
         taskList.remove(task);
