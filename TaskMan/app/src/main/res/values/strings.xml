@@ -17,8 +17,12 @@
     <string name="edit_task_description">You can edit the task</string>
     <string name="delete_task_description">You can delete the task</string>
     <string name="reminder_button_description">A button for setting the reminder</string>
-    <string name="taskman">Task has created</string>
+    <string name="taskman">You Have this task to do</string>
     <string name="set_reminder">Set the Reminder</string>
-    <string name="reminder_set">Set Reminder</string>
+    <string name="reminder_set">Alert scheduled</string>
     <string name="empty_task">There is no active task</string>
+    <string name="channel_name">reminders</string>
+    <string name="channel_description">your task needs attention</string>
+    <string name="alert">Alert</string>
+
 </resources>

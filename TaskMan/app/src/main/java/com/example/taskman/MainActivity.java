@@ -2,11 +2,14 @@ package com.example.taskman;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.AlarmClock;
 import android.text.TextUtils;
@@ -44,11 +47,22 @@ public class MainActivity extends AppCompatActivity {
     private Button addButton;
     private LinearLayout taskListLayout;
     private ArrayList<String> taskList;
+    private static final String CHANNEL_ID = "my_channel_id";
     TextView emptytasks;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        createNotificationChannel();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "My Channel", NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("My notification channel description");
+
+            // Step 5: Register the notification channel
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
         emptytasks = findViewById(R.id.emptytasks);
 
         taskEditText = findViewById(R.id.task_edit_text);
@@ -96,6 +110,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("task man_channel", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
 
     private void addTaskView(final String task) {
         if (task.isEmpty()) {
@@ -149,15 +175,18 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "Task added: ", Toast.LENGTH_SHORT).show();
     }
 
+
     private void showReminderDialog(final String task) {
         final View dialogView = getLayoutInflater().inflate(R.layout.reminder_dialog, null);
         final DatePicker datePicker = dialogView.findViewById(R.id.datePicker);
         final TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
 
+
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.set_reminder));
         builder.setView(dialogView);
-        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Alarm", new DialogInterface.OnClickListener() {
 
 
             @Override
@@ -174,17 +203,40 @@ public class MainActivity extends AppCompatActivity {
                 calendar.set(Calendar.HOUR_OF_DAY, hour);
                 calendar.set(Calendar.MINUTE, minute);
                 calendar.set(Calendar.SECOND, 0);
-                setReminder(task, calendar.getTimeInMillis());
+
                 Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM);
                 intent.putExtra(AlarmClock.EXTRA_DAYS, day);
-                intent.putExtra(AlarmClock.EXTRA_HOUR,hour);
-                intent.putExtra(AlarmClock.EXTRA_MINUTES,minute);
+                intent.putExtra(AlarmClock.EXTRA_HOUR, hour);
+                intent.putExtra(AlarmClock.EXTRA_MINUTES, minute);
                 startActivity(intent);
+
+
+
+
 
             }
         });
-        builder.setNegativeButton(android.R.string.cancel, null);
-        builder.create().show();
+        builder.setNegativeButton("Alert",new DialogInterface.OnClickListener(){
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int year = datePicker.getYear();
+                int month = datePicker.getMonth();
+                int day = datePicker.getDayOfMonth();
+                int hour = timePicker.getHour();
+                int minute = timePicker.getMinute();
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, day);
+                calendar.set(Calendar.HOUR_OF_DAY, hour);
+                calendar.set(Calendar.MINUTE, minute);
+                calendar.set(Calendar.SECOND, 0);
+                setReminder(task, calendar.getTimeInMillis());
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void setReminder(String task, long timeInMillis) {
@@ -200,6 +252,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e("Reminder", "Error setting alarm", e);
         }
     }
+
     private void removeTaskView(View taskView, String task) {
         taskListLayout.removeView(taskView);
         taskList.remove(task);
