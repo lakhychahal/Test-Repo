@@ -12,5 +12,6 @@
     <color name="edit_button_bg">#61A431</color>
     <color name="delete_button_bg_pressed">#536F3F</color>
     <color name="edit_button_bg_pressed">#62804C</color>
+    <color name="todoGray">#C7C7C7</color>
 
 </resources>

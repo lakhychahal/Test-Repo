@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.AlarmClock;
@@ -149,7 +150,33 @@ public class MainActivity extends AppCompatActivity {
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                getTaskState(task);
                 saveTaskState(task, isChecked);
+                SharedPreferences sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+                Drawable currentBackground = taskView.getBackground();
+                Drawable background2  = getDrawable(R.drawable.rounded_edittext_background1);
+                Drawable background3 = getDrawable(R.drawable.rounded_edittext_background2);
+
+                if (isChecked) {
+                    taskView.setBackground(background2);
+                } else {
+                    taskView.setBackground(background3);
+                }
+            }
+
+            private boolean getTaskState(String task) {
+                SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+                return preferences.getBoolean(task, false);
+            }
+
+            private void saveTaskState(String task, boolean isChecked) {
+                SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(task, isChecked);
+                editor.apply();
+
+                boolean savedState = preferences.getBoolean(task, false);
+                Log.d("SaveTaskState", "Saved state for task " + task + ": " + savedState);
 
             }
         });
