@@ -24,6 +24,7 @@
     <string name="empty_task">There is no active task</string>
     <string name="channel_name">reminders</string>
     <string name="channel_description">your task needs attention</string>
+    <string name="view_completed_tasks">View completed tasks</string>
     <string name="alert">Alert</string>
 
 </resources>

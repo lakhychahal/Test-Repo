@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Objects;
 
 public class Task implements Comparable<Task> {
-    //created to hold the task data
+
     private final String task;
     private final boolean completed;
     private final Date startDate;
@@ -47,7 +47,7 @@ public class Task implements Comparable<Task> {
     @Override
     public int compareTo(@NonNull Task o) {
 
-        // this is used in sorting the tasks according to the name, completion status and lastly, the start date set
+
         int t = this.task.compareTo(o.task);
         if (t != 0) return t;
         int c = Boolean.compare(completed, o.completed);
@@ -69,10 +69,10 @@ public class Task implements Comparable<Task> {
         if (o == null || getClass() != o.getClass()) return false;
         Task task1 = (Task) o;
         boolean b = completed == task1.completed && task.equals(task1.task);
-        //when either dates is exclusively but not both null return false
+
         if (startDate == null ^ task1.startDate == null) return false;
 
-        // at this point, it's either the dates are null or neither is null
+
         if (startDate == null) return b;
         return b && Objects.equals(startDate, task1.startDate);
     }

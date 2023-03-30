@@ -29,7 +29,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder> {
-    // it handles the tasks and their views
+
     private static final String TAG = "TasksAdapter";
 
 
@@ -45,23 +45,23 @@ public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder>
         }
     };
 
-    // this function will listen to the checked status change, update the state and then update the view.
+
     @NotNull
     private final Function<Task, Void> onTaskCheckedListener;
-    // this function listens to start date update events
+
     @NotNull
     private final Function<Task, Void> onTaskStartDateSetListener;
-    // this function listens to task deletion events
+
     @NotNull
     private final Function<Task, Void> onTaskDeletedListener;
-    // this functions has two parameters and it's the one use to listen to when a task is edited
+
     @NotNull
     private final BiFunction<Task, Task, Void> onTaskUpdatedListener;
-    // this function is used to listen to the notification event
+
     @NotNull
     private final Function<Task, Void> onTaskNotificationListener;
 
-    // this is constructor receives the said fuctions as parameters
+
     public TasksAdapter(@NotNull Function<Task, Void> onTaskCheckedListener,
                         @NotNull Function<Task, Void> onTaskStartDateSetListener,
                         @NotNull Function<Task, Void> onTaskDeletedListener,
@@ -78,10 +78,6 @@ public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder>
     @NonNull
     @Override
     public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // creates a viewholder
-        // the viewholder holds the view of a task at a given position in a list
-        // the viewholder is fed with data by the following method below.
-        //ie. the onBindViewHolder
 
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -92,7 +88,7 @@ public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder>
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
 
-        // feeds the respective data into the respective view
+
         holder.bind(getItem(position));
     }
 
@@ -117,15 +113,11 @@ public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder>
 
         public void bind(@NonNull Task task) {
 
-            // this method sets up the the task to its respective view
-            // e.g. setting the task name, background, checked status e.t.c
-            // it also listens to the events on the given task eg deleting, editing,
-            // updating the completion status etc
+
 
             taskTextView.setText(task.getTask());
 
-            // get the updated task state and set the respective background for the task
-            // based on the state.
+
             final int id;
             if (task.isCompleted()) {
                 id = R.drawable.rounded_edittext_background1;
@@ -141,32 +133,8 @@ public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder>
             String dateText;
             Date date = task.getStartDate();
             if (date == null) {
-                // there is no date set hence we prompt the user to set the date
+
                 dateText = itemView.getContext().getString(R.string.start_date);
-                setStartDate.setOnClickListener(v -> {
-                    Log.d(TAG, "bind: set start date");
-                    Calendar c = Calendar.getInstance();
-                    int year = c.get(Calendar.YEAR);
-                    int month = c.get(Calendar.MONTH);
-                    int dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
-                    DatePickerDialog datePickerDialog = new DatePickerDialog(
-                            this.itemView.getContext(), (view, year1, month1, dayOfMonth1) -> {
-                        int p = getAdapterPosition();
-                        if (p == RecyclerView.NO_POSITION) return;
-
-                        // extract the date set
-                        Calendar c1 = Calendar.getInstance();
-                        c1.set(Calendar.YEAR, year1);
-                        c1.set(Calendar.MONTH, month1);
-                        c1.set(Calendar.DAY_OF_MONTH, dayOfMonth1);
-
-                        // update the task item to have the new date
-                        Task item = getItem(p).setStartDate(c1.getTime());
-                        onTaskStartDateSetListener.apply(item);
-                    }, year, month, dayOfMonth);
-
-                    datePickerDialog.show();
-                });
             } else {
                 dateText = new SimpleDateFormat("MMM d", Locale.getDefault()).format(task.getStartDate());
             }
@@ -179,10 +147,10 @@ public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder>
                 onTaskNotificationListener.apply(task1);
             });
 
-            // listen to the task completion status
+
             taskCompletedCheckBox.setChecked(task.isCompleted());
             taskCompletedCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                // update the task state here
+
                 Task task1 = getTask().setIsCompleted(isChecked);
                 onTaskCheckedListener.apply(task1);
             });
@@ -204,7 +172,7 @@ public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder>
                                     .setPositiveButton("OK", null);
                             AlertDialog dialog = builder.create();
                             dialog.show();
-                            // apply the update
+
                             onTaskUpdatedListener.apply(task1, task1.updateTask(text));
                         }
 
@@ -221,12 +189,35 @@ public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder>
                     onTaskDeletedListener.apply(task1);
                 }
             });
+
+            setStartDate.setOnClickListener(v -> {
+                Log.d(TAG, "bind: set start date");
+                Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        this.itemView.getContext(), (view, year1, month1, dayOfMonth1) -> {
+                    int p = getAdapterPosition();
+                    if (p == RecyclerView.NO_POSITION) return;
+
+
+                    Calendar c1 = Calendar.getInstance();
+                    c1.set(Calendar.YEAR, year1);
+                    c1.set(Calendar.MONTH, month1);
+                    c1.set(Calendar.DAY_OF_MONTH, dayOfMonth1);
+
+
+                    Task item = getItem(p).setStartDate(c1.getTime());
+                    onTaskStartDateSetListener.apply(item);
+                }, year, month, dayOfMonth);
+
+                datePickerDialog.show();
+            });
         }
 
         Task getTask() {
-            // returns a task at a given position e.g when a user checks the checkbox, deletes the item etc
-            // the no_position is crutial to prevent unwanted results and is well documented.
-            // i.e it should be handled
+
             int position = getAdapterPosition();
             if (position == RecyclerView.NO_POSITION) {
                 return null;
