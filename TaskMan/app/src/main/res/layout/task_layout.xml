@@ -1,68 +1,81 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="16dp"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="5dp"
     tools:ignore="UseSwitchCompatOrMaterialXml">
 
-    <EditText
-        android:id="@+id/task_text_view"
-        android:layout_width="0dp"
-        android:layout_height="46dp"
-        android:layout_gravity="center_horizontal"
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
         android:layout_weight="1"
-        android:backgroundTint="@android:color/white"
-        android:contentDescription="@string/task_description"
-        android:fontFamily="@font/robo5"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:enabled="false"
-        android:textSize="22sp"
-        android:padding="6dp"
-        android:lineSpacingExtra="3dp"
-        android:background="@drawable/rounded_edittext_background"
-        android:elevation="8dp"/>
+        android:backgroundTint="#61A431"
+        android:onClick="starton"
+        android:text="@string/start_date"
+        android:textSize="12sp" />
 
-    <ImageButton
-        android:id="@+id/reminder_button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#6BB84F"
-        android:contentDescription="@string/reminder_button_description"
-        android:foregroundTint="#9C3131"
-        android:src="@android:drawable/ic_popup_reminder" />
+        android:orientation="horizontal">
 
-    <CheckBox
-        android:id="@+id/task_checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:buttonTint="@color/black"
-        android:gravity="start|top" />
 
-    <ImageButton
-        android:id="@+id/edit_button"
-        android:layout_width="51dp"
-        android:layout_height="47dp"
-        android:background="@android:color/transparent"
-        android:backgroundTint="#2EBC40"
-        android:backgroundTintMode="src_over"
-        android:contentDescription="@string/edit_task_description"
-        android:foregroundTint="@color/delete_button_bg"
-        android:onClick="editTask"
-        android:src="@android:drawable/ic_menu_edit" />
+        <EditText
+            android:id="@+id/task_text_view"
+            android:layout_width="89dp"
+            android:layout_height="46dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_edittext_background"
+            android:backgroundTint="@android:color/white"
+            android:contentDescription="@string/task_description"
+            android:elevation="8dp"
+            android:enabled="false"
+            android:fontFamily="@font/robo5"
+            android:lineSpacingExtra="3dp"
+            android:padding="6dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
 
-    <ImageButton
-        android:id="@+id/delete_button"
-        android:layout_width="51dp"
-        android:layout_height="47dp"
-        android:background="@color/delete_button_bg"
-        android:backgroundTintMode="screen"
-        android:contentDescription="@string/delete_task_description"
-        android:onClick="deleteTask"
-        android:src="@android:drawable/ic_menu_delete" />
+        <ImageButton
+            android:id="@+id/reminder_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#6BB84F"
+            android:contentDescription="@string/reminder_button_description"
+            android:foregroundTint="#9C3131"
+            android:src="@android:drawable/ic_popup_reminder" />
 
+        <CheckBox
+            android:id="@+id/task_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/black" />
+
+        <ImageButton
+            android:id="@+id/edit_button"
+            android:layout_width="51dp"
+            android:layout_height="47dp"
+            android:background="@android:color/transparent"
+            android:backgroundTint="#2EBC40"
+            android:backgroundTintMode="src_over"
+            android:contentDescription="@string/edit_task_description"
+            android:foregroundTint="@color/delete_button_bg"
+            android:onClick="editTask"
+            android:src="@android:drawable/ic_menu_edit" />
+
+        <ImageButton
+            android:id="@+id/delete_button"
+            android:layout_width="51dp"
+            android:layout_height="47dp"
+            android:background="@color/delete_button_bg"
+            android:backgroundTintMode="screen"
+            android:contentDescription="@string/delete_task_description"
+            android:onClick="deleteTask"
+            android:src="@android:drawable/ic_menu_delete" />
+    </LinearLayout>
 </LinearLayout>
