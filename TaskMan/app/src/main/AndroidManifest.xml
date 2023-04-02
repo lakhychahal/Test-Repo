@@ -14,13 +14,17 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.TaskMan"
-
         tools:targetApi="31">
+        <activity
+            android:name=".About"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"/>
+
         <receiver android:name=".ReminderBroadcastReceiver" />
 
         <activity
             android:name=".SplashScreen"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,10 +32,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:exported="false">
 
-        </activity>
+            android:name=".MainActivity"
+            android:exported="false"></activity>
+        <activity
+            android:name=".CompletedTasksActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.TaskMan.CompletedTasks" />
     </application>
 
 </manifest>

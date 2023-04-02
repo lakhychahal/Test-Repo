@@ -12,6 +12,7 @@
     <string name="clear_all_tasks">Clear all</string>
     <string name="clear_all">Clear All</string>
     <string name="sort">Sort</string>
+    <string name="start_date">Start On</string>
     <string name="enter_your_text_here">Enter your task here</string>
     <string name="complete">Complete</string>
     <string name="edit_task_description">You can edit the task</string>
@@ -23,6 +24,22 @@
     <string name="empty_task">There is no active task</string>
     <string name="channel_name">reminders</string>
     <string name="channel_description">your task needs attention</string>
+    <string name="view_completed_tasks">View completed tasks</string>
     <string name="alert">Alert</string>
+    <string-array name="priorities">
+        <item>Low</item>
+        <item>Medium</item>
+        <item>Important</item>
+    </string-array>
+    <string name="priority">Set Priority</string>
+
+    <string name="low">Low</string>
+    <string name="medium">Medium</string>
+    <string name="important">Important</string>
+    <string name="set_priority">Set Priority</string>
+    <string name="Support">Support</string>
+    <string name="about">About</string>
+    <string name="all_info_title">Task Man Purpose</string>
+    <string name="details">Welcome to TaskMan, the ultimate task management app designed to make your life easier. With TaskMan, you can create and manage your to-do lists, set reminders, and prioritize your tasks with ease. Our intuitive interface and customizable options make it simple to organize your daily routine and keep track of everything you need to get done. Whether you\'re a busy professional, a student, or just someone who wants to be more productive, TaskMan is the perfect solution for anyone looking to stay on top of their to-do list.</string>
 
 </resources>
