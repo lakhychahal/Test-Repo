@@ -78,4 +78,27 @@
             android:onClick="deleteTask"
             android:src="@android:drawable/ic_menu_delete" />
     </LinearLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        style="?textInputOutlinedExposedDropdownMenuStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        app:boxBackgroundColor="#61A431"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:endIconTint="@color/white"
+        app:hintEnabled="false">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/set_priority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/set_priority"
+            android:inputType="none"
+            android:minHeight="40dp"
+            android:padding="0dp"
+            android:textColor="@color/white"
+            android:textColorHint="#ccc"
+            app:simpleItems="@array/priorities" />
+    </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

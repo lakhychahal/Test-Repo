@@ -1,9 +1,11 @@
 package com.example.taskman;
 
 import static com.example.taskman.MainActivity.APP_PREFS;
+import static com.example.taskman.MainActivity.PRIORITIES;
 import static com.example.taskman.MainActivity.START_DATES;
 import static com.example.taskman.MainActivity.TASKS;
 import static com.example.taskman.MainActivity.TASKS_COMPLETED;
+import static com.example.taskman.TaskPriority.NONE;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -41,7 +43,8 @@ public class CompletedTasksActivity extends AppCompatActivity {
                 this::updateStartDate,
                 this::deleteTask,
                 this::updateTask,
-                this::taskNotification);
+                this::taskNotification,
+                this::updatePriority);
         RecyclerView recyclerView = findViewById(R.id.completed_tasks);
         recyclerView.setAdapter(adapter);
 
@@ -129,6 +132,16 @@ public class CompletedTasksActivity extends AppCompatActivity {
         return null;
     }
 
+    @Nullable
+    private Void updatePriority(@NonNull Task task) {
+        SharedPreferences priorityPreferences = taskPriorityPreferences();
+        SharedPreferences.Editor editor = priorityPreferences.edit();
+        editor.putString(task.getTask(), task.getPriority().name());
+        editor.apply();
+        reconstructTasks();
+        return null;
+    }
+
     private void reconstructTasks() {
 
 
@@ -136,6 +149,7 @@ public class CompletedTasksActivity extends AppCompatActivity {
         Set<String> taskNamesSet = preferences.getStringSet(TASKS, new HashSet<>());
         final SharedPreferences taskStartDatesPreferences = taskStartDatesPreferences();
         final SharedPreferences taskCompletionStatusPreferences = taskCompletionStatusPreferences();
+        final SharedPreferences priorityPreferences = taskPriorityPreferences();
 
         List<Task> tasks = new ArrayList<>();
         for (String s : taskNamesSet) {
@@ -144,8 +158,9 @@ public class CompletedTasksActivity extends AppCompatActivity {
             Date d;
             if (date == -1) d = null;
             else d = new Date(date);
+            TaskPriority priority = TaskPriority.valueOf(priorityPreferences.getString(s, NONE.name()));
             if (isTaskCompleted)
-                tasks.add(new Task(s, true, d));
+                tasks.add(new Task(s, true, d, priority));
         }
         Log.i(TAG, "reconstructTasks: list size " + tasks.size());
         adapter.submitList(tasks);
@@ -155,7 +170,6 @@ public class CompletedTasksActivity extends AppCompatActivity {
         else taskMessageVisibility = View.GONE;
         emptytasks.setVisibility(taskMessageVisibility);
     }
-
 
 
     private SharedPreferences preferences() {
@@ -172,4 +186,9 @@ public class CompletedTasksActivity extends AppCompatActivity {
 
         return getSharedPreferences(START_DATES, MODE_PRIVATE);
     }
+
+    private SharedPreferences taskPriorityPreferences() {
+        return getSharedPreferences(PRIORITIES, MODE_PRIVATE);
+    }
 }
+

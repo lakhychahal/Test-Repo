@@ -1,5 +1,7 @@
 package com.example.taskman;
 
+import static com.example.taskman.TaskPriority.NONE;
+
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.NotificationChannel;
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TASKS_COMPLETED = "tasks-completed";
 
     public static final String SORTED = "tasks-sorted";
+    public static final String PRIORITIES = "priorities";
 
     private static final String CHANNEL_ID = "my_channel_id";
     private EditText taskEditText;
@@ -95,7 +98,8 @@ public class MainActivity extends AppCompatActivity {
                 this::updateStartDate,
                 this::deleteTask,
                 this::updateTask,
-                this::taskNotification);
+                this::taskNotification,
+                this::updatePriority);
         RecyclerView tasksRecyclerView = findViewById(R.id.tasks);
         tasksRecyclerView.setAdapter(adapter);
 
@@ -351,6 +355,16 @@ public class MainActivity extends AppCompatActivity {
         showReminderDialog(task);
         return null;
     }
+    @Nullable
+    private Void updatePriority(@NonNull Task task) {
+        SharedPreferences priorityPreferences = taskPriorityPreferences();
+        SharedPreferences.Editor editor = priorityPreferences.edit();
+        editor.putString(task.getTask(), task.getPriority().name());
+        editor.apply();
+        Log.i(TAG, "updatePriority: " + priorityPreferences.getString(task.getTask(), "None"));
+        reconstructTasks();
+        return null;
+    }
 
     private void reconstructTasks() {
 
@@ -359,6 +373,7 @@ public class MainActivity extends AppCompatActivity {
         Set<String> taskNamesSet = preferences.getStringSet(TASKS, new HashSet<>());
         final SharedPreferences taskStartDatesPreferences = taskStartDatesPreferences();
         final SharedPreferences taskCompletionStatusPreferences = taskCompletionStatusPreferences();
+        final SharedPreferences priorityPreferences = taskPriorityPreferences();
 
         List<Task> tasks = new ArrayList<>();
         for (String s : taskNamesSet) {
@@ -367,8 +382,9 @@ public class MainActivity extends AppCompatActivity {
             Date d;
             if (date == -1) d = null;
             else d = new Date(date);
+            TaskPriority priority = TaskPriority.valueOf(priorityPreferences.getString(s, NONE.name()));
             if (!isTaskCompleted)
-                tasks.add(new Task(s, false, d));
+                tasks.add(new Task(s, false, d , priority));
         }
 
         if (preferences.getBoolean(SORTED, false)) {
@@ -400,5 +416,8 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences taskStartDatesPreferences() {
 
         return getSharedPreferences(START_DATES, MODE_PRIVATE);
+    }
+    private SharedPreferences taskPriorityPreferences() {
+        return getSharedPreferences(PRIORITIES, MODE_PRIVATE);
     }
 }

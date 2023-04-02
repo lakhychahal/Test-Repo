@@ -26,5 +26,16 @@
     <string name="channel_description">your task needs attention</string>
     <string name="view_completed_tasks">View completed tasks</string>
     <string name="alert">Alert</string>
+    <string-array name="priorities">
+        <item>Low</item>
+        <item>Medium</item>
+        <item>Important</item>
+    </string-array>
+    <string name="priority">Set Priority</string>
+
+    <string name="low">Low</string>
+    <string name="medium">Medium</string>
+    <string name="important">Important</string>
+    <string name="set_priority">Set Priority</string>
 
 </resources>

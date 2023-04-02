@@ -12,11 +12,13 @@ public class Task implements Comparable<Task> {
     private final String task;
     private final boolean completed;
     private final Date startDate;
+    private final TaskPriority priority;
 
-    public Task(String task, boolean completed, Date startDate) {
+    public Task(String task, boolean completed, Date startDate, TaskPriority priority) {
         this.task = task;
         this.completed = completed;
         this.startDate = startDate;
+        this.priority = priority;
     }
 
     public String getTask() {
@@ -28,15 +30,22 @@ public class Task implements Comparable<Task> {
     }
 
     public Task updateTask(String task) {
-        return new Task(task, completed, startDate);
+        return new Task(task, completed, startDate, priority);
     }
 
     public Task setStartDate(Date startDate) {
-        return new Task(task, completed, startDate);
+        return new Task(task, completed, startDate, priority);
     }
 
     public Task setIsCompleted(boolean isCompleted) {
-        return new Task(task, isCompleted, startDate);
+        return new Task(task, isCompleted, startDate, priority);
+    }
+    public Task setPriority(TaskPriority priority) {
+        return new Task(task, completed, startDate, priority);
+    }
+
+    public TaskPriority getPriority() {
+        return priority;
     }
 
     @Nullable

@@ -1,11 +1,15 @@
 package com.example.taskman;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -19,12 +23,15 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -60,20 +67,25 @@ public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder>
 
     @NotNull
     private final Function<Task, Void> onTaskNotificationListener;
+    @NotNull
+    private final Function<Task, Void> onTaskPriorityUpdateListener;
 
 
     public TasksAdapter(@NotNull Function<Task, Void> onTaskCheckedListener,
                         @NotNull Function<Task, Void> onTaskStartDateSetListener,
                         @NotNull Function<Task, Void> onTaskDeletedListener,
                         @NotNull BiFunction<Task, Task, Void> onTaskUpdatedListener,
-                        @NotNull Function<Task, Void> onTaskNotificationListener) {
+                        @NotNull Function<Task, Void> onTaskNotificationListener,
+                        @NotNull Function<Task, Void> onTaskPriorityUpdateListener) {
         super(DIFF_UTIL);
         this.onTaskCheckedListener = onTaskCheckedListener;
         this.onTaskStartDateSetListener = onTaskStartDateSetListener;
         this.onTaskDeletedListener = onTaskDeletedListener;
         this.onTaskUpdatedListener = onTaskUpdatedListener;
         this.onTaskNotificationListener = onTaskNotificationListener;
+        this.onTaskPriorityUpdateListener = onTaskPriorityUpdateListener;
     }
+
 
     @NonNull
     @Override
@@ -99,21 +111,39 @@ public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder>
         private final CheckBox taskCompletedCheckBox;
         private final ImageButton editButton;
         private final ImageButton deleteButton;
+        private final MaterialAutoCompleteTextView prioritySelector;
+
+        private final TextWatcher prioritySelectionWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.i(TAG, "afterTextChanged: starting");
+
+            }
+        };
 
         public TaskViewHolder(View view) {
             super(view);
-
             taskTextView = itemView.findViewById(R.id.task_text_view);
             setStartDate = itemView.findViewById(R.id.button);
             reminderButton = itemView.findViewById(R.id.reminder_button);
             taskCompletedCheckBox = itemView.findViewById(R.id.task_checkbox);
             editButton = itemView.findViewById(R.id.edit_button);
             deleteButton = itemView.findViewById(R.id.delete_button);
+            prioritySelector = itemView.findViewById(R.id.set_priority);
         }
 
+
         public void bind(@NonNull Task task) {
-
-
 
             taskTextView.setText(task.getTask());
 
@@ -150,46 +180,40 @@ public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder>
 
             taskCompletedCheckBox.setChecked(task.isCompleted());
             taskCompletedCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
                 Task task1 = getTask().setIsCompleted(isChecked);
                 onTaskCheckedListener.apply(task1);
             });
-
             editButton.setOnClickListener(v -> {
 
                 taskTextView.setEnabled(!taskTextView.isEnabled());
-                taskTextView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String text = taskTextView.getText().toString();
+                taskTextView.setOnClickListener(v1 -> {
+                    String text = taskTextView.getText().toString();
 
-                        Task task1 = getTask();
-                        if (task1 != null) {
+                    Task task1 = getTask();
+                    if (task1 != null) {
 
-                            AlertDialog.Builder builder = new AlertDialog.Builder(TaskViewHolder.this.itemView.getContext());
-                            builder.setMessage(text)
-                                    .setTitle("Full View of Task")
-                                    .setPositiveButton("OK", null);
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(TaskViewHolder.this.itemView.getContext());
+                        builder.setMessage(text)
+                                .setTitle("Full View of Task")
+                                .setPositiveButton("OK", null);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
 
-                            onTaskUpdatedListener.apply(task1, task1.updateTask(text));
-                        }
-
+                        onTaskUpdatedListener.apply(task1, task1.updateTask(text));
                     }
+
                 });
 
                 Toast.makeText(this.itemView.getContext(), "Edit Enable ", Toast.LENGTH_SHORT).show();
             });
-
             deleteButton.setOnClickListener(v -> {
                 Task task1 = getTask();
                 if (task1 != null) {
                     Log.i(TAG, "bind: deleting a task");
                     onTaskDeletedListener.apply(task1);
                 }
+                Toast.makeText(this.itemView.getContext(), "Task Deleted ", Toast.LENGTH_SHORT).show();
             });
-
             setStartDate.setOnClickListener(v -> {
                 Log.d(TAG, "bind: set start date");
                 Calendar c = Calendar.getInstance();
@@ -214,6 +238,68 @@ public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder>
 
                 datePickerDialog.show();
             });
+
+
+            // setting up the initial task priority
+            Context context = itemView.getContext();
+            TaskPriority priority = task.getPriority();
+            if (priority != TaskPriority.NONE) {
+                String currentPriority = priority.text(context);
+                String[] priorities = context.getResources().getStringArray(R.array.priorities);
+
+                // finding the priority that matches the set one to ensure confluence of the value set
+                for (int i = priorities.length - 1; i >= 0; i--) {
+                    String priority1 = priorities[i];
+                    if (Objects.equals(currentPriority, priority1)) {
+                        // first remove this watcher then make the update
+                        // this prevents an infinite flow of updates
+//                        prioritySelector.removeTextChangedListener(prioritySelectionWatcher);
+                        Log.i(TAG, "bind: text changing");
+                        prioritySelector.setText(priority1);
+                        // after setting the text, you need to refresh the selection list otherwise
+                        // some misbehaviour will occur.
+                        // comment the following line to see the misbehaviour
+                        prioritySelector.setSimpleItems(R.array.priorities);
+                        break;
+                    }
+                }
+            }
+            // Listen to selection changes on the priority selector
+//            prioritySelector.addTextChangedListener(prioritySelectionWatcher);
+            prioritySelector.setOnItemClickListener((parent, view, position, id1) -> {
+                String st = (String) parent.getItemAtPosition(position);
+                Context context1 = itemView.getContext();
+                if (st == null) {
+                    // do nothing if the text is null
+                    return;
+                }
+
+                st = st.trim();
+                if (st.isEmpty()) {
+                    // also do nothing if the text is empty, recall to trim to remove whitespaces in the text
+                    return;
+                }
+
+                final String low = context1.getString(R.string.low);
+                final String medium = context1.getString(R.string.medium);
+                TaskPriority priority12;
+                if (st.equals(low)) {
+                    priority12 = TaskPriority.LOW;
+                } else if (st.equals(medium)) {
+                    priority12 = TaskPriority.MEDIUM;
+                } else {
+                    priority12 = TaskPriority.IMPORTANT;
+                }
+                Task task1 = getTask();
+                if (task1 == null) {
+                    return;
+                }
+
+                // update the priority selection to the respective task record
+
+                Task task2 = task1.setPriority(priority12);
+                onTaskPriorityUpdateListener.apply(task2);
+            });
         }
 
         Task getTask() {
@@ -225,5 +311,9 @@ public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder>
 
             return getItem(position);
         }
+
     }
+
+
 }
+
