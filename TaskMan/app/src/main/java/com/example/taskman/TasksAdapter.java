@@ -239,32 +239,25 @@ public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder>
                 datePickerDialog.show();
             });
 
-
-            // setting up the initial task priority
             Context context = itemView.getContext();
             TaskPriority priority = task.getPriority();
             if (priority != TaskPriority.NONE) {
                 String currentPriority = priority.text(context);
                 String[] priorities = context.getResources().getStringArray(R.array.priorities);
 
-                // finding the priority that matches the set one to ensure confluence of the value set
+
                 for (int i = priorities.length - 1; i >= 0; i--) {
                     String priority1 = priorities[i];
                     if (Objects.equals(currentPriority, priority1)) {
-                        // first remove this watcher then make the update
-                        // this prevents an infinite flow of updates
 //                        prioritySelector.removeTextChangedListener(prioritySelectionWatcher);
                         Log.i(TAG, "bind: text changing");
                         prioritySelector.setText(priority1);
-                        // after setting the text, you need to refresh the selection list otherwise
-                        // some misbehaviour will occur.
-                        // comment the following line to see the misbehaviour
+
                         prioritySelector.setSimpleItems(R.array.priorities);
                         break;
                     }
                 }
             }
-            // Listen to selection changes on the priority selector
 //            prioritySelector.addTextChangedListener(prioritySelectionWatcher);
             prioritySelector.setOnItemClickListener((parent, view, position, id1) -> {
                 String st = (String) parent.getItemAtPosition(position);
