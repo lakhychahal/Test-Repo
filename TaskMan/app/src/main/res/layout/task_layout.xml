@@ -5,29 +5,87 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="vertical"
-    android:padding="5dp"
+    android:layout_marginBottom="15dp"
+    android:padding="20dp"
+    android:background="@drawable/customborder"
     tools:ignore="UseSwitchCompatOrMaterialXml">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_weight="1"
-        android:backgroundTint="#61A431"
-        android:onClick="starton"
-        android:text="@string/start_date"
-        android:textSize="12sp" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
 
+        android:layout_marginBottom="5dp">
+
+
+
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:backgroundTint="#61A431"
+            android:onClick="starton"
+            android:text="@string/start_date"
+            android:textSize="12sp" />
+
+        <ImageButton
+            android:id="@+id/reminder_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#6BB84F"
+            android:layout_weight="1"
+            android:contentDescription="@string/reminder_button_description"
+            android:foregroundTint="#9C3131"
+            android:src="@android:drawable/ic_popup_reminder" />
+
+        <CheckBox
+            android:id="@+id/task_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/black" />
+
+        <ImageButton
+            android:id="@+id/edit_button"
+            android:layout_width="51dp"
+            android:layout_height="47dp"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:backgroundTint="#2EBC40"
+            android:backgroundTintMode="src_over"
+            android:layout_weight="1"
+            android:contentDescription="@string/edit_task_description"
+            android:foregroundTint="@color/delete_button_bg"
+            android:onClick="editTask"
+            android:src="@android:drawable/ic_menu_edit" />
+
+        <ImageButton
+            android:id="@+id/delete_button"
+            android:layout_width="51dp"
+            android:layout_height="47dp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/delete_button_bg"
+            android:backgroundTintMode="screen"
+            android:layout_weight="1"
+            android:contentDescription="@string/delete_task_description"
+            android:onClick="deleteTask"
+            android:src="@android:drawable/ic_menu_delete" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/task_text_view"
-            android:layout_width="89dp"
-            android:layout_height="46dp"
+            android:layout_width="350dp"
+            android:layout_height="60dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_edittext_background"
             android:backgroundTint="@android:color/white"
@@ -38,51 +96,15 @@
             android:lineSpacingExtra="3dp"
             android:padding="6dp"
             android:textAlignment="center"
+            android:layout_marginRight="9dp"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 
-        <ImageButton
-            android:id="@+id/reminder_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#6BB84F"
-            android:contentDescription="@string/reminder_button_description"
-            android:foregroundTint="#9C3131"
-            android:src="@android:drawable/ic_popup_reminder" />
-
-        <CheckBox
-            android:id="@+id/task_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/black" />
-
-        <ImageButton
-            android:id="@+id/edit_button"
-            android:layout_width="51dp"
-            android:layout_height="47dp"
-            android:background="@android:color/transparent"
-            android:backgroundTint="#2EBC40"
-            android:backgroundTintMode="src_over"
-            android:contentDescription="@string/edit_task_description"
-            android:foregroundTint="@color/delete_button_bg"
-            android:onClick="editTask"
-            android:src="@android:drawable/ic_menu_edit" />
-
-        <ImageButton
-            android:id="@+id/delete_button"
-            android:layout_width="51dp"
-            android:layout_height="47dp"
-            android:background="@color/delete_button_bg"
-            android:backgroundTintMode="screen"
-            android:contentDescription="@string/delete_task_description"
-            android:onClick="deleteTask"
-            android:src="@android:drawable/ic_menu_delete" />
-    </LinearLayout>
     <com.google.android.material.textfield.TextInputLayout
         style="?textInputOutlinedExposedDropdownMenuStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:layout_gravity="center_vertical"
         app:boxBackgroundColor="#61A431"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
@@ -91,14 +113,24 @@
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/set_priority"
-            android:layout_width="wrap_content"
+            android:layout_width="128dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:hint="@string/set_priority"
             android:inputType="none"
-            android:minHeight="40dp"
+            android:minHeight="20dp"
             android:padding="0dp"
             android:textColor="@color/white"
             android:textColorHint="#ccc"
+            android:textSize="13dp"
             app:simpleItems="@array/priorities" />
     </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/SplitLine_hor1"
+        android:layout_width="match_parent"
+        android:layout_height= "4dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/green" />
 </LinearLayout>
